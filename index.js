@@ -38,6 +38,25 @@ async function run() {
       res.send(result);
       console.log(user);
     });
+    app.put("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const user = req.body;
+      const option = { upsert: true };
+      const updatedUser = {
+        $set: {
+          name: user.name,
+          address: user.address,
+          email: user.email,
+        },
+      };
+      const result = await userCollection.updateOne(
+        filter,
+        updatedUser,
+        option
+      );
+      res.send(result);
+    });
     app.delete("/users/:id", async (req, res) => {
       const id = req.params.id;
       //   console.log("trying to delete ", id);
